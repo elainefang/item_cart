@@ -5,18 +5,28 @@ var Body = React.createClass({
 
     componentDidMount() {
         $.getJSON('/api/v1/items.json', (response) => { this.setState({ items: response }) });
-        console.log('Component mounted');
     },
 
     handleSubmit(item) {
-        console.log(item);
+        var newState = this.state.items.concat(item);
+        this.setState({ items: newState });
     },
+
+   handleDelete() {
+        $.ajax({
+            url: `/api/v1/items/${id}`,
+            type: 'DELETE',
+            success(response) {
+                console.log('successfully removed item')
+            }
+        });
+   },
 
    render() {
        return (
            <div>
-               <NewItem />
-               <AllItems items={this.state.items} />
+               <NewItem handleSubmit={this.handleSubmit}/>
+               <AllItems items={this.state.items} handleDelete={this.handleDelete}/>
            </div>
        )
    }
